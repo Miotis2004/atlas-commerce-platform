@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: ${INVENTORY_DB_URL:jdbc:postgresql://localhost:5435/inventory_db}
+    username: ${INVENTORY_DB_USERNAME:atlas}
+    password: ${INVENTORY_DB_PASSWORD:atlas}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: inventory-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.atlas.inventory.kafka"
+        spring.json.value.default.type: com.atlas.inventory.kafka.OrderCreatedEvent
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
