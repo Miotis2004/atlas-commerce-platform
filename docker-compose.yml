@@ -1,0 +1,112 @@
+version: '3.9'
+
+services:
+  postgres-auth:
+    image: postgres:16-alpine
+    container_name: atlas-postgres-auth
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: atlas
+      POSTGRES_PASSWORD: atlas
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlas -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-catalog:
+    image: postgres:16-alpine
+    container_name: atlas-postgres-catalog
+    environment:
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: atlas
+      POSTGRES_PASSWORD: atlas
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-catalog-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlas -d catalog_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-inventory:
+    image: postgres:16-alpine
+    container_name: atlas-postgres-inventory
+    environment:
+      POSTGRES_DB: inventory_db
+      POSTGRES_USER: atlas
+      POSTGRES_PASSWORD: atlas
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-inventory-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlas -d inventory_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-order:
+    image: postgres:16-alpine
+    container_name: atlas-postgres-order
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: atlas
+      POSTGRES_PASSWORD: atlas
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres-order-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlas -d order_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb-notification:
+    image: mongo:7
+    container_name: atlas-mongodb-notification
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: atlas
+      MONGO_INITDB_ROOT_PASSWORD: atlas
+      MONGO_INITDB_DATABASE: notification_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-notification-data:/data/db
+
+  kafka:
+    image: bitnami/kafka:3.8
+    container_name: atlas-kafka
+    environment:
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_KRAFT_CLUSTER_ID: MDEyMzQ1Njc4OWFiY2RlZg
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka-data:/bitnami/kafka
+
+volumes:
+  postgres-auth-data:
+  postgres-catalog-data:
+  postgres-inventory-data:
+  postgres-order-data:
+  mongodb-notification-data:
+  kafka-data:
