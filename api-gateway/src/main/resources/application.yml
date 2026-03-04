@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       routes:
@@ -23,11 +25,26 @@ spring:
             - Path=/api/v1/orders/**
 
 management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
 
 app:
   jwt:
     secret: atlas-platform-jwt-secret-at-least-32-bytes-long
+
+logging:
+  structured:
+    format:
+      console: logstash
