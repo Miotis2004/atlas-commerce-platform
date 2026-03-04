@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: catalog-service
+  datasource:
+    url: ${CATALOG_DB_URL:jdbc:postgresql://localhost:5434/catalog_db}
+    username: ${CATALOG_DB_USERNAME:atlas}
+    password: ${CATALOG_DB_PASSWORD:atlas}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
