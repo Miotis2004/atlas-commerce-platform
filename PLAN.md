@@ -45,7 +45,7 @@ This document outlines the step-by-step development plan for the Atlas Commerce 
    - Implement logic to reserve and release stock (`StockReservation`).
    - Setup Kafka consumers to listen to events (e.g., `OrderCreated`).
 
-## Phase 4: Order Management and Messaging
+## Phase 4: Order Management and Messaging ✅
 **Objective:** Complete the core e-commerce flow by introducing order management and event-driven notifications.
 
 1. **Develop Order Service (`order-service`):**

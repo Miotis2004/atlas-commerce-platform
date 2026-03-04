@@ -1,10 +1,10 @@
 spring:
   application:
-    name: inventory-service
+    name: order-service
   datasource:
-    url: ${INVENTORY_DB_URL:jdbc:postgresql://localhost:5435/inventory_db}
-    username: ${INVENTORY_DB_USERNAME:atlas}
-    password: ${INVENTORY_DB_PASSWORD:atlas}
+    url: ${ORDER_DB_URL:jdbc:postgresql://localhost:5436/order_db}
+    username: ${ORDER_DB_USERNAME:atlas}
+    password: ${ORDER_DB_PASSWORD:atlas}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -14,13 +14,12 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
-      group-id: inventory-service
+      group-id: order-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.atlas.inventory.kafka"
-        spring.json.value.default.type: com.atlas.inventory.kafka.OrderCreatedEvent
+        spring.json.trusted.packages: "com.atlas.order.kafka"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
