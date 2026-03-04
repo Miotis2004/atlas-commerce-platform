@@ -17,7 +17,7 @@ This document outlines the step-by-step development plan for the Atlas Commerce 
    - Define common event schemas (e.g., `OrderCreated`, `StockReserved`).
    - Add standard configurations (e.g., JSON serialization, correlation ID propagation).
 
-## Phase 2: Gateway and Authentication
+## Phase 2: Gateway and Authentication ✅
 **Objective:** Implement the entry point of the system and secure it with JWT-based authentication.
 
 1. **Develop Auth Service (`auth-service`):**
